@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Prompt Builder — Free Tool by AI Refresh</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: #f6f7fb; color: #1f2430; padding: 16px; }
+  .card { max-width: 560px; margin: 0 auto; background: #ffffff; border: 1px solid #e4e7ef; border-radius: 14px; padding: 20px; }
+  h1 { font-size: 20px; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #5b6474; margin-bottom: 16px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 6px; }
+  textarea, select, input { width: 100%; padding: 10px; border: 1px solid #ccd2df; border-radius: 8px; font-size: 14px; font-family: inherit; background: #fff; }
+  textarea { resize: vertical; }
+  button { width: 100%; margin-top: 16px; padding: 12px; border: 0; border-radius: 8px; background: #4f46e5; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; }
+  button:hover { background: #4338ca; }
+  #outWrap { display: none; margin-top: 16px; }
+  #out { background: #f2f4fa; }
+  #copyBtn { background: #111827; margin-top: 8px; }
+  #copyBtn:hover { background: #000000; }
+  .foot { margin-top: 16px; text-align: center; font-size: 12.5px; color: #5b6474; }
+  .foot a { color: #4f46e5; font-weight: 700; text-decoration: none; }
+  .foot a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>AI Prompt Builder</h1>
+  <p class="sub">Turn a simple idea into a ready-to-use prompt for ChatGPT, Claude or Gemini.</p>
+
+  <label for="idea">What do you want the AI to do?</label>
+  <textarea id="idea" rows="3" placeholder="e.g. Write a product description for handmade leather wallets"></textarea>
+
+  <label for="role">AI should act as (optional)</label>
+  <input id="role" type="text" placeholder="e.g. an expert copywriter">
+
+  <label for="tone">Tone</label>
+  <select id="tone">
+    <option value="">Any</option>
+    <option>Friendly</option>
+    <option>Professional</option>
+    <option>Confident</option>
+    <option>Funny</option>
+    <option>Formal</option>
+    <option>Simple and clear</option>
+  </select>
+
+  <label for="format">Output format</label>
+  <select id="format">
+    <option value="">Any</option>
+    <option>Short paragraphs</option>
+    <option>A bullet list</option>
+    <option>A numbered step-by-step guide</option>
+    <option>A table</option>
+    <option>A short answer under 150 words</option>
+    <option>A detailed answer with headings</option>
+  </select>
+
+  <button id="buildBtn" type="button">Build My Prompt</button>
+
+  <div id="outWrap">
+    <label for="out">Your prompt — copy and paste it into any AI chat:</label>
+    <textarea id="out" rows="7" readonly></textarea>
+    <button id="copyBtn" type="button">Copy Prompt</button>
+  </div>
+
+  <p class="foot">Powered by <a href="https://ai-refresh.com/" target="_blank" rel="noopener">AI Refresh</a> — free AI tools &amp; guides</p>
+</div>
+
+<script>
+  function buildPrompt() {
+    var idea = document.getElementById('idea').value.trim();
+    var role = document.getElementById('role').value.trim();
+    var tone = document.getElementById('tone').value;
+    var format = document.getElementById('format').value;
+    if (!idea) { alert('Please type what you want the AI to do first.'); return; }
+    var lines = [];
+    if (role) lines.push('Act as ' + role + '.');
+    lines.push(idea);
+    var style = [];
+    if (tone) style.push('Tone: ' + tone);
+    if (format) style.push('Format: ' + format);
+    if (style.length) lines.push(style.join(' | '));
+    document.getElementById('out').value = lines.join('\n');
+    document.getElementById('outWrap').style.display = 'block';
+  }
+  document.getElementById('buildBtn').addEventListener('click', buildPrompt);
+  document.getElementById('copyBtn').addEventListener('click', function () {
+    var out = document.getElementById('out');
+    out.select();
+    var done = function () {
+      var b = document.getElementById('copyBtn');
+      b.textContent = 'Copied!';
+      setTimeout(function () { b.textContent = 'Copy Prompt'; }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(out.value).then(done, function () { document.execCommand('copy'); done(); });
+    } else { document.execCommand('copy'); done(); }
+  });
+</script>
+</body>
+</html>
